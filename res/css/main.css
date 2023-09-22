@@ -1,0 +1,45 @@
+body {
+    margin: 0;
+    background-color: rgb(110, 130, 130)
+}
+
+#main {
+    width: 2048px;
+    height: 1664px;
+    margin-left: 300px;
+    position: relative;
+    overflow: hidden;
+}
+
+#game_map {
+    width: 2048px;
+    height: 1664px;
+    background: url(../map/1.jpg) no-repeat;
+    background-size: 100% 100%;
+    overflow: hidden;    
+    position: absolute;
+    top: 0;
+
+    animation: animatedBackground 6s linear infinite;
+}
+
+#ctx {
+    position: absolute;
+    width: 2048px;
+    height: 1664px;
+    top: 0;
+}
+
+@keyframes animatedBackground{
+     0%  {background-image: url("../map/1.jpg");}
+     10%  {background-image: url("../map/2.jpg");}
+     20%  {background-image: url("../map/3.jpg");}
+     30%  {background-image: url("../map/4.jpg");}
+     40%  {background-image: url("../map/5.jpg");}
+     50%  {background-image: url("../map/6.jpg");}
+     60%  {background-image: url("../map/7.jpg");}
+     70%  {background-image: url("../map/8.jpg");}
+     80%  {background-image: url("../map/9.jpg");}
+     90%  {background-image: url("../map/10.jpg");}
+    100%  {background-image: url("../map/11.jpg");}
+ }

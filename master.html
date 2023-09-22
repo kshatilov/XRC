@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="res/css/main.css">
+    <script type="application/javascript" src="res/lib/cloudgen-min.js"></script>
+    <title>Document</title>
+    <script type="module">
+
+        const cloudGrid = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1],
+            [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1],
+            [1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0]
+        ];
+
+        const tower_locations = {
+            //           midT1,     midT2,      botT1,     botT2,     topT1,    topT2
+            ["team1"]: [[90, 95], [90, 95], [205, 120], [120, 120], [80, 59], [22, 75]],
+            ["team2"]: [[170, 70], [215, 66], [280, 115], [266, 81], [138, 49], [200, 49]]
+        }
+
+        window.onload = () => {
+            let canvas = document.getElementById("ctx");
+            let context = canvas.getContext("2d");
+
+            init_ui(canvas, context);
+        }
+
+
+        const init_ui = (canvas, context) => {
+
+            const FPS = 3;
+
+            const clouds = () => {
+                const alpha = 4;
+                window.$cloudgen.drawCloudGroup(context, cloudGrid, 0, 0, 17,
+                    { r: 160, g: 200, b: 200 },
+                    0.007 * alpha, 80);
+                window.$cloudgen.drawCloudGroup(context, cloudGrid, 0, 0, 17,
+                    { r: 60, g: 60, b: 100 },
+                    0.008 * alpha, 10);
+            };
+
+            const tower = (x, y, r, color) => {
+                context.beginPath();
+                context.fillStyle = color;
+                context.arc(x, y, r * 1.5, 0, 2 * Math.PI, false);
+                context.fill();
+                context.closePath();
+                context.beginPath();
+                context.fillStyle = "black";
+                context.arc(x, y, r, 0, 2 * Math.PI, false);
+                context.fill();
+            };
+
+            const towers = () => {
+                const radius = 3;
+                const fill_color = '#00000055';
+                const team_colors = {
+                    ["team1"]: '#00FF00',
+                    ["team2"]: '#FF0000'
+                };
+                for (let team in tower_locations) {
+                    for (let i = 0; i < tower_locations[team].length; i++) {
+                        tower(tower_locations[team][i][0], tower_locations[team][i][1], radius, team_colors[team]);
+                    }
+                }
+            };
+
+            setInterval(() => {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                towers();
+                clouds();
+            }, 1000 / FPS);
+        };
+
+
+    </script>
+</head>
+
+<body>
+    <div id="main">
+        <div id="game_map"></div>
+        <canvas id="ctx"></canvas>
+    </div>
+</body>
