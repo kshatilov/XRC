@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="res/css/main.css">
+    <title>Document</title>
+    <script type="module">
+
+        window.onload = () => {
+            let canvas = document.getElementById("ctx");
+            let context = canvas.getContext("2d");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init_ui(canvas, context);
+        }
+
+        const init_ui = (canvas, context) => {
+
+            let horses_num = 1;
+
+            const get_horses = () => {
+                fetch("http://localhost:1488/horses")
+                    .then(response => response.json())
+                    .then(horse_list => {
+                        draw_horses(horse_list);
+                        horses_num = horse_list.length;
+                    });
+            }
+
+            const draw_horses = (horse_list) => {
+
+                const horse_colors = [
+                    "blue",
+                    "purple",
+                    "red",
+                    "orange",
+                    "yellow",
+                    "green",
+                ];
+
+                const draw_horse = (x, y, index) => {
+                    context.beginPath();
+                    context.fillStyle = horse_colors[index];
+                    context.arc(x, y, 20, 0, 2 * Math.PI, false);
+                    context.fill();
+                }
+
+                let lane = 1
+                horse_list.forEach(horse_x => {
+                    draw_horse(window.innerWidth * 0.25 + 
+                               (window.innerWidth * 0.5) * horse_x, 
+                               window.innerHeight * (0.3 / horses_num) * lane + 
+                               iteration / Math.PI, lane - 1);
+                    lane++;
+                });
+            }
+
+            const FPS = 25;
+            let iteration = 0;
+            
+            setInterval(() => {
+                //context.clearRect(0, 0, canvas.width, canvas.height);
+                get_horses();
+                //iteration++;
+                
+            }, 1000 / FPS);
+        };
+
+    </script>
+</head>
+
+<body>
+    <div id="main">
+        <canvas id="ctx"></canvas>
+    </div>
+</body>
