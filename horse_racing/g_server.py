@@ -1,7 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import random
 import threading
-from horse import horserun
 
 PORT = 1488
 HORSE_COUNT = 8
@@ -18,9 +17,8 @@ class HorseList:
         self.horses = list
 
     def update_random(self):
-        self.horses = [x + random.random() * 0.05 for x in self.horses]
+        self.horses = [x + random.random() * 0.0008 for x in self.horses]
         self.horses = [1 if x > 1 else x for x in self.horses]
-        print(str(self.horses))
 
         if all(h == 1.0 for h in self.horses):
              self.horses = [0.0] * HORSE_COUNT
@@ -56,9 +54,10 @@ def run_server(server_class=HTTPServer, handler_class=GServer, port=PORT):
 
 
 if __name__ == '__main__':
-    # set_interval(cycle, 1 / 10)
+    set_interval(cycle, 1 / 60)
 
     server_thread = threading.Thread(target = run_server)
     server_thread.start()
 
-    horserun("horse.mp4", horse_rankings.update)
+    # horserun("horse.mp4", horse_rankings.update)
+    # get_horses(horse_rankings.update)

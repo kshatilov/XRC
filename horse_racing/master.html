@@ -7,6 +7,40 @@
     <title>Document</title>
     <script type="module">
 
+        const horse_colors = [
+            "navy",
+            "olive",
+            "chocolate",
+            "crimson",
+            "coral",
+            "dimgray",
+            "firebrick",
+            "forestgreen",
+            "fuchsia",
+            "gainsboro",
+            "goldenrod",
+            "hotpink",
+            "indianred",
+            "indigo",
+            "khaki",
+            "lavender",
+            "lavenderblush",
+            "lawngreen",
+            "maroon",
+            "mediumvioletred",
+            "midnightblue",
+            "mistyrose",
+            "moccasin",
+            "oldlace",
+            "olivedrab",
+            "orangered",
+            "orchid",
+            "turquoise",
+        ]
+            .map(value => ({ value, sort: Math.random() }))
+            .sort((a, b) => a.sort - b.sort)
+            .map(({ value }) => value);
+
         window.onload = () => {
             let canvas = document.getElementById("ctx");
             let context = canvas.getContext("2d");
@@ -16,6 +50,9 @@
         }
 
         const init_ui = (canvas, context) => {
+
+            const w = window.innerWidth;
+            const h = window.innerHeight;
 
             let horses_num = 1;
 
@@ -30,40 +67,37 @@
 
             const draw_horses = (horse_list) => {
 
-                const horse_colors = [
-                    "blue",
-                    "purple",
-                    "red",
-                    "orange",
-                    "yellow",
-                    "green",
-                ];
+
 
                 const draw_horse = (x, y, index) => {
                     context.beginPath();
                     context.fillStyle = horse_colors[index];
-                    context.arc(x, y, 20, 0, 2 * Math.PI, false);
+                    context.arc(x, y, 8, 0, 2 * Math.PI, false);
                     context.fill();
                 }
 
-                let lane = 1
-                horse_list.forEach(horse_x => {
-                    draw_horse(window.innerWidth * 0.25 + 
-                               (window.innerWidth * 0.5) * horse_x, 
-                               window.innerHeight * (0.3 / horses_num) * lane + 
-                               iteration / Math.PI, lane - 1);
-                    lane++;
+                let lane = 0
+                let rad_inc = 20;
+                horse_list.forEach(p => {
+
+                    let alpha = p * (2 * Math.PI);
+                    const r = 30 + lane * rad_inc;
+
+                    let x0 = w / 2;
+                    let y0 = h / 2;
+
+                    let x =  x0 + r * Math.cos(alpha);
+                    let y =  y0 + r * Math.sin(alpha);
+
+                    draw_horse(x, y, lane++);
                 });
             }
 
-            const FPS = 25;
-            let iteration = 0;
-            
+            const FPS = 30;
+
             setInterval(() => {
                 //context.clearRect(0, 0, canvas.width, canvas.height);
                 get_horses();
-                //iteration++;
-                
             }, 1000 / FPS);
         };
 
